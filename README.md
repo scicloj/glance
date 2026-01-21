@@ -43,9 +43,9 @@ org.scicloj/noj {:mvn/version "2.0.0"}
 ```clojure
 (require '[scicloj.glance :as g])
 
-(g/show [1 4 9 16])
+(g/plot [1 4 9 16])
 
-(g/show {:x [1 2 3 4]
+(g/plot {:x [1 2 3 4]
          :y [10 12 9 14]})
 ```
 
