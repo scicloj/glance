@@ -26,7 +26,7 @@
 
 ;; Categorical single column → bar chart shows frequencies
 
-(g/plot {:colors ["red" "blue" "red" "green" "blue" "red" "green" "green"]})
+(g/plot {:fruits ["apple" "banana" "apple" "kiwi" "banana" "apple" "kiwi" "kiwi"]})
 
 ;; ## Two Column Visualizations
 
@@ -40,7 +40,7 @@
 ;; Categorical × Categorical → heatmap (shows contingency)
 
 (g/plot {:size ["small" "large" "small" "medium" "large" "small" "medium" "large"]
-         :color ["red" "blue" "red" "green" "blue" "red" "green" "green"]})
+         :fruit ["apple" "banana" "apple" "kiwi" "banana" "apple" "kiwi" "banana"]})
 
 ;; Categorical × Quantitative → bar chart (distribution by category)
 
@@ -78,6 +78,8 @@
           [:li "Lin — 35"]]
          [:button "Refresh scores"]])
 
+;; Nest charts inside hiccup
+
 (g/plot [:div
          [:h3 "Mini dashboard"]
          [:p "Quick glance: revenue trend and churn mix"]
@@ -87,6 +89,12 @@
             [:td (g/plot {:month ["Jan" "Feb" "Mar" "Apr" "May" "Jun"]
                           :revenue [12 15 14 18 22 25]})]
             [:td (g/plot {:status ["kept" "kept" "churned" "kept" "kept" "churned" "kept" "kept" "churned" "kept" "kept" "kept"]})]]]]])
+
+;; ## CSV Data
+
+;; Load and visualize CSV files from URL or local path
+
+(g/plot "https://drive.google.com/uc?id=13a2WyLoGxQKXbN_AIjrOogIlQKNe9uPm&export=download")
 
 ;; ## Edge Cases & Tips
 
