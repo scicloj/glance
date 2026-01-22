@@ -29,13 +29,13 @@ Add Glance to your project dependencies:
 
 **deps.edn:**
 ```clojure
-org.scicloj/glance {:mvn/version "0.1.0"}
+org.scicloj/glance {:mvn/version "TODO"}
 ```
 
 **Alternatively**, you can depend on [Noj](https://scicloj.github.io/noj/), which includes Glance along with the broader data-science stack:
 
 ```clojure
-org.scicloj/noj {:mvn/version "2.0.0"}
+org.scicloj/noj {:mvn/version "TODO"}
 ```
 
 ## Usage
@@ -54,6 +54,29 @@ Glance tries to **do the obvious thing** based on the shape of your data:
 * A single vector → values vs index
 * A map of vectors → inferred x/y or multiple series
 * A sequence of maps → columns inferred automatically
+* A CSV file (filename or URL) → automatically loaded and visualized
+
+```clojure
+(g/plot "data.csv")
+(g/plot "https://example.com/data.csv")
+```
+
+### Hiccup and nested plots
+
+You can also pass **Hiccup** directly to `plot` to compose custom markup with visualizations:
+
+```clojure
+(g/plot [:div
+         [:h2 "Dashboard"]
+         [:p "Quick overview"]
+         (g/plot {:month ["Jan" "Feb" "Mar"]
+                  :revenue [12 15 18]})])
+```
+
+Nested `plot` calls work seamlessly—when you call `plot` inside another `plot`,
+the inner plots render inline without opening additional browser windows.
+
+Take a look at [notebooks/examples.clj](notebooks/examples.clj) for more examples.
 
 ## Relationship to Clay, Tableplot and Noj
 

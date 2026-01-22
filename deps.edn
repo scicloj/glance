@@ -1,5 +1,15 @@
-{:deps {org.scicloj/clay      {:mvn/version "2.0.5"}
-        org.scicloj/tableplot {:mvn/version "1-beta14"}}
+{:deps {org.scicloj/clay       {#_#_:mvn/version "2.0.5"
+                                :git/url "https://github.com/scicloj/clay"
+                                :git/sha "5ca26957f1141caed210b07143fe88ffc1ca9bb1"}
+        org.scicloj/tableplot  {:mvn/version "1-beta14"}}
  :aliases
  {:dev {:extra-paths ["notebooks"]}
-  :local-deps {:override-deps {org.scicloj/clay {:local/root "../clay"}}}}}
+  :local-deps {:override-deps {org.scicloj/clay {:local/root "../clay"}}}
+
+  ;; Build and release
+  ;; clojure -T:build jar        - Build JAR
+  ;; clojure -T:build ci         - Build JAR (runs ci pipeline)
+  ;; clojure -T:build deploy     - Deploy to Clojars
+  :build {:deps {io.github.clojure/tools.build {:git/tag "v0.9.5" :git/sha "2017e07"}
+                 deps-deploy/deps-deploy {:mvn/version "0.0.52"}}
+          :ns-default build}}}
