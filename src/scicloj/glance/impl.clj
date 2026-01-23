@@ -173,9 +173,18 @@
                                                         max-val (apply max values)
                                                         nbins (min (inc (- max-val min-val)) 50)]
                                                     {:=histogram-nbins (max 1 nbins)})
-                                                  {})]
-                             (-> ds (plotly/layer-histogram (assoc histogram-opts :=x col-name))))))
-                       :bar (-> ds (plotly/layer-bar {:=x col-name}))
+                                                  {})
+                                 ;; Create clean dataset with only non-nil values
+                                 clean-ds (ds/->dataset {col-name values})]
+                             (-> clean-ds (plotly/layer-histogram (assoc histogram-opts :=x col-name))))))
+                       :bar
+                       ;; For categorical, aggregate frequencies
+                       (let [values (remove nil? col-data)
+                             freqs (->> values frequencies (sort-by key))
+                             categories (mapv first freqs)
+                             counts (mapv second freqs)
+                             agg-ds (ds/->dataset {:category categories :count counts})]
+                         (-> agg-ds (plotly/layer-bar {:=x :category :=y :count})))
                        :identity (-> ds (plotly/layer-point {:=x col-name}))
                        (-> ds (plotly/layer-point {:=x col-name})))
                      (catch Exception _
@@ -213,8 +222,10 @@
                                              ;; one bin per integer step, capped
                                              nbins (min (inc (- max-val min-val)) 50)]
                                          {:=histogram-nbins (max 1 nbins)})
-                                       {})]
-                  (-> ds (plotly/layer-histogram (assoc histogram-opts :=x col))))))
+                                       {})
+                      ;; Create clean dataset with only non-nil values
+                      clean-ds (ds/->dataset {col values})]
+                  (-> clean-ds (plotly/layer-histogram (assoc histogram-opts :=x col))))))
             :bar
             ;; For categorical, aggregate frequencies
             (let [freqs (->> col-data
