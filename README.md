@@ -58,25 +58,12 @@ Glance tries to **do the obvious thing** based on the shape of your data:
 
 ```clojure
 (g/plot "data.csv")
-(g/plot "https://example.com/data.csv")
 ```
 
-### Hiccup and nested plots
+## Documentation
 
-You can also pass **Hiccup** directly to `plot` to compose custom markup with visualizations:
-
-```clojure
-(g/plot [:div
-         [:h2 "Dashboard"]
-         [:p "Quick overview"]
-         (g/plot {:month ["Jan" "Feb" "Mar"]
-                  :revenue [12 15 18]})])
-```
-
-Nested `plot` calls work seamlessly—when you call `plot` inside another `plot`,
-the inner plots render inline without opening additional browser windows.
-
-Take a look at [notebooks/examples.clj](notebooks/examples.clj) for more examples.
+See [Glance Documentation](https://scicloj.github.io/glance/)
+or work through the notebook [notebooks/index.clj](notebooks/index.clj) for more examples.
 
 ## Relationship to Clay, Tableplot and Noj
 

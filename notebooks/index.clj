@@ -1,6 +1,6 @@
 ;; ## Introducing Glance
 ;;
-;; Glance just plots your data.
+;; [Glance](https://github.com/scicloj/glance) just plots your data.
 ;;
 ;; Philosophy:
 ;;

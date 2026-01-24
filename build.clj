@@ -8,7 +8,7 @@
             [deps-deploy.deps-deploy :as dd]))
 
 (def lib 'org.scicloj/glance)
-(def version "0.1.0")
+(def version "0.1.0-alpha1")
 (def class-dir "target/classes")
 
 (defn- pom-template [version]
