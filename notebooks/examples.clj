@@ -1,6 +1,4 @@
-(ns examples)
-
-;; # Introducing Glance
+;; ## Introducing Glance
 ;;
 ;; Glance just plots your data.
 ;;
@@ -11,7 +9,7 @@
 ;; - Automatically picks an appropriate chart type
 ;; - No plotting API to learn
 
-;; ## 1. Quick Start: `g/plot`
+;; ## Quick Start: `g/plot`
 
 (ns examples
   (:require [scicloj.glance :as g]))
@@ -20,6 +18,8 @@
 
 (g/plot {:study-hours [2 3 5 4 6 8 7 9]
          :test-score [65 70 80 75 85 90 88 95]})
+
+;; ## Plot infered from data
 
 ;; Many numbers → histogram
 
@@ -73,7 +73,7 @@
 
 ;; Glance picks an appropriate chart for the data.
 
-;; ## 2. Multi-Column Datasets
+;; ## Multi-Column Datasets
 
 ;; With 3+ columns, Glance creates a summary view with statistics
 ;; and individual visualizations for each column
@@ -84,7 +84,7 @@
          :salary [95000 72000 88000 65000 78000 102000 61000 75000]
          :years-experience [5 3 7 2 4 9 1 3]})
 
-;; ## 3. Composing Kinds and Hiccup
+;; ## Composing Kinds and Hiccup
 
 ;; You can use [Kindly](https://scicloj.github.io/kindly-noted/kindly)
 ;; annotations to request other visualizations:
@@ -144,7 +144,7 @@
            }, 50);
          "]])
 
-;; ### Preparing Data with Tablecloth
+;; ## Preparing Data with Tablecloth
 
 ;; Tablecloth can be used to query and transform data before plotting.
 ;; This is useful for filtering, selecting columns, or aggregating data.
@@ -171,7 +171,7 @@
 
 ;; See the [Tablecloth Documentation](https://scicloj.github.io/tablecloth/)
 
-;; ## 4. Plotly Specs (`g/plotly`)
+;; ## Plotly Specs (`g/plotly`)
 ;;
 ;; While `g/plot` is great for instant visualizations, sometimes you need
 ;; more control. The `g/plotly` function returns the inferred Plotly
@@ -209,7 +209,7 @@
 ;; For more information see the
 ;; [Plotly Reference](https://plotly.com/javascript/basic-charts/)
 
-;; ## 5. Why Glance
+;; ## Why Glance
 ;;
 ;; Glance is for data explorers who want to visualize
 ;; data without needing to learn plotting APIs.

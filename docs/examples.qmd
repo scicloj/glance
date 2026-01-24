@@ -1,0 +1,574 @@
+---
+format:
+  html: {toc: true, toc-depth: 4, theme: cosmo}
+
+---
+<style></style><style>.printedClojure .sourceCode {
+  background-color: transparent;
+  border-style: none;
+}
+</style><style>.clay-limit-image-width .clay-image {max-width: 100%}
+.clay-side-by-side .sourceCode {margin: 0}
+.clay-side-by-side {margin: 1em 0}
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script><script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js" type="text/javascript"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.20.0/plotly.min.js" type="text/javascript"></script>
+
+## Introducing Glance
+
+Glance just plots your data.
+
+Philosophy:
+
+
+- One function: `g/plot`
+- Opens a browser window showing your data
+- Automatically picks an appropriate chart type
+- No plotting API to learn
+
+
+## Quick Start: `g/plot`
+
+
+::: {.sourceClojure}
+```clojure
+(ns examples
+  (:require [scicloj.glance :as g]))
+```
+:::
+
+
+Quantitative × Quantitative → scatter plot
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot {:study-hours [2 3 5 4 6 8 7 9]
+         :test-score [65 70 80 75 85 90 88 95]})
+```
+:::
+
+
+
+```{=html}
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[65,70,80,75,85,90,88,95],"r":null,"name":"","fill":null,"mode":"markers","width":null,"type":"scatter","theta":null,"z":null,"lon":null,"lat":null,"x":[2,3,5,4,6,8,7,9],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"study-hours","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"test-score","showgrid":true},"title":null}, {});</script></div>
+```
+
+
+
+## Plot infered from data
+
+Many numbers → histogram
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot {:temperatures [16.2 17.5 18.1 19.3 20.8 22.4 24.1 25.7 26.3 27.8 28.5 29.2 30.1]})
+```
+:::
+
+
+
+```{=html}
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[2,1,1,1,1,1,1,1,2,2],"r":null,"name":"","fill":null,"mode":null,"width":[1.3900000000000006,1.3900000000000006,1.3900000000000006,1.3900000000000006,1.389999999999997,1.3900000000000006,1.3900000000000006,1.3900000000000006,1.3900000000000006,1.3900000000000006],"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":[16.895,18.285,19.675,21.065,22.455,23.845,25.235,26.625,28.015,29.405],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"temperatures","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div>
+```
+
+
+A few unique values → bar chart with frequencies
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot {:dice-rolls [1 3 2 6 4 3 2 1 5 3 4 6 2 3 1]})
+```
+:::
+
+
+
+```{=html}
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[3,3,4,2,1,2],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":[1,2,3,4,5,6],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div>
+```
+
+
+Time series → line chart
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot {:date ["2024-01-01" "2024-01-02" "2024-01-03"
+                "2024-01-04" "2024-01-05" "2024-01-06" "2024-01-07"]
+         :visitors [120 132 128 150 170 165 180]})
+```
+:::
+
+
+
+```{=html}
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[120,132,128,150,170,165,180],"r":null,"name":"","fill":null,"mode":"lines","width":null,"type":"scatter","theta":null,"z":null,"lon":null,"lat":null,"x":["2024-01-01","2024-01-02","2024-01-03","2024-01-04","2024-01-05","2024-01-06","2024-01-07"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"date","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"visitors","showgrid":true},"title":null}, {});</script></div>
+```
+
+
+Pass data as columns or rows
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot [{:date "2024-01-01" :visitors 120}
+         {:date "2024-01-02" :visitors 132}
+         {:date "2024-01-03" :visitors 128}
+         {:date "2024-01-04" :visitors 150}
+         {:date "2024-01-05" :visitors 170}
+         {:date "2024-01-06" :visitors 165}
+         {:date "2024-01-07" :visitors 180}])
+```
+:::
+
+
+
+```{=html}
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[120,132,128,150,170,165,180],"r":null,"name":"","fill":null,"mode":"lines","width":null,"type":"scatter","theta":null,"z":null,"lon":null,"lat":null,"x":["2024-01-01","2024-01-02","2024-01-03","2024-01-04","2024-01-05","2024-01-06","2024-01-07"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"date","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"visitors","showgrid":true},"title":null}, {});</script></div>
+```
+
+
+Categorical data → bar chart of frequencies
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot {:fruits ["apple" "banana" "apple" "kiwi" "banana" "apple" "kiwi" "kiwi"]})
+```
+:::
+
+
+
+```{=html}
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[3,2,3],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["apple","banana","kiwi"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div>
+```
+
+
+Load a local CSV file
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot "datasets/sample.csv")
+```
+:::
+
+
+
+```{=html}
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[12000,15000,14000,18000,22000],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["Jan","Feb","Mar","Apr","May"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"month","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"revenue","showgrid":true},"title":null}, {});</script></div>
+```
+
+
+A single number
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot 1)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+1
+
+```
+:::
+
+
+A vector
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot [1 2 3 4 5 1 2 3 1 2 1])
+```
+:::
+
+
+
+```{=html}
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[4,3,2,1,1],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":[1,2,3,4,5],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div>
+```
+
+
+Categorical × Categorical → heatmap shows contingency table
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot {:activity ["running" "running" "running" "running" "running" "running" "cycling" "cycling" "cycling" "cycling" "cycling" "cycling"]
+         :weather ["sunny" "sunny" "sunny" "sunny" "sunny" "rainy" "sunny" "sunny" "rainy" "rainy" "rainy" "rainy"]})
+```
+:::
+
+
+
+```{=html}
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"type":"heatmap","x":["cycling","running"],"y":["rainy","sunny"],"z":[[4,1],[2,5]],"colorscale":"Viridis","hoverongaps":false}], {"xaxis":{"title":"activity"},"yaxis":{"title":"weather"}}, {});</script></div>
+```
+
+
+Categorical × Quantitative → grouped bar chart
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot {:region ["North" "South" "East" "North" "South" "East" "West" "North"]
+         :sales [45 62 38 51 58 42 48 55]})
+```
+:::
+
+
+
+```{=html}
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[45,62,38,51,58,42,48,55],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["North","South","East","North","South","East","West","North"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"region","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"sales","showgrid":true},"title":null}, {});</script></div>
+```
+
+
+Glance picks an appropriate chart for the data.
+
+
+## Multi-Column Datasets
+
+With 3+ columns, Glance creates a summary view with statistics
+and individual visualizations for each column
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot {:employee-id [101 102 103 104 105 106 107 108]
+         :department ["Engineering" "Sales" "Engineering" "Marketing"
+                      "Sales" "Engineering" "Marketing" "Sales"]
+         :salary [95000 72000 88000 65000 78000 102000 61000 75000]
+         :years-experience [5 3 7 2 4 9 1 3]})
+```
+:::
+
+
+
+```{=html}
+<div style="margin:0 auto;max-width:800px;"><div style="border:1px solid #ddd;border-radius:5px;margin-bottom:20px;padding:15px;"><div style="align-items:center;display:flex;gap:20px;"><div style="flex:1 1 auto;"><h4 style="margin:0;">employee-id</h4><div style="color:#666;font-size:12px;margin-top:5px;">n=8, min=101.00, mean=104.50, max=108.00</div></div><div style="flex:0 0 auto;text-align:right;"><div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[1,1,1,1,1,1,1,1],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":[101,102,103,104,105,106,107,108],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div></div></div></div><div style="border:1px solid #ddd;border-radius:5px;margin-bottom:20px;padding:15px;"><div style="align-items:center;display:flex;gap:20px;"><div style="flex:1 1 auto;"><h4 style="margin:0;">department</h4><div style="color:#666;font-size:12px;margin-top:5px;">n=8, unique=3</div></div><div style="flex:0 0 auto;text-align:right;"><div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[3,2,3],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["Engineering","Marketing","Sales"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div></div></div></div><div style="border:1px solid #ddd;border-radius:5px;margin-bottom:20px;padding:15px;"><div style="align-items:center;display:flex;gap:20px;"><div style="flex:1 1 auto;"><h4 style="margin:0;">salary</h4><div style="color:#666;font-size:12px;margin-top:5px;">n=8, min=61000.00, mean=79500.00, max=102000.00</div></div><div style="flex:0 0 auto;text-align:right;"><div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[1,1,1,1,1,1,1,1],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":[61000,65000,72000,75000,78000,88000,95000,102000],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div></div></div></div><div style="border:1px solid #ddd;border-radius:5px;margin-bottom:20px;padding:15px;"><div style="align-items:center;display:flex;gap:20px;"><div style="flex:1 1 auto;"><h4 style="margin:0;">years-experience</h4><div style="color:#666;font-size:12px;margin-top:5px;">n=8, min=1.00, mean=4.25, max=9.00</div></div><div style="flex:0 0 auto;text-align:right;"><div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[1,1,2,1,1,1,1],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":[1,2,3,4,5,7,9],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div></div></div></div></div>
+```
+
+
+
+## Composing Kinds and Hiccup
+
+You can use [Kindly](https://scicloj.github.io/kindly-noted/kindly)
+annotations to request other visualizations:
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot ^:kind/table {:product ["Widget" "Gadget" "Doohickey"]
+                      :price [19.99 29.99 14.99]
+                      :stock [45 23 67]})
+```
+:::
+
+
+::: {.clay-table}
+
+```{=html}
+<table class="table table-hover table-responsive clay-table"><thead><tr><th>product</th><th>price</th><th>stock</th></tr></thead><tbody><tr><td>Widget</td><td>19.99</td><td>45</td></tr><tr><td>Gadget</td><td>29.99</td><td>23</td></tr><tr><td>Doohickey</td><td>14.99</td><td>67</td></tr></tbody></table>
+```
+
+:::
+
+
+See [Clay Examples](https://scicloj.github.io/clay/clay_book.examples.html)
+for examples of other interesting kinds.
+
+Beyond simple plots, you can create dashboards using Hiccup markup.
+Nest multiple plots in custom HTML layouts:
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot [:div {:style {:border "1px solid" :padding "20px"}}
+         [:h3 "Sales Dashboard"]
+         [:p "Monthly revenue trends and customer retention"]
+         [:div
+          (g/plot {:month ["Jan" "Feb" "Mar" "Apr" "May" "Jun"]
+                   :revenue [12000 15000 14000 18000 22000 25000]})
+          (g/plot {:status ["active" "active" "churned" "active" "active" "churned"
+                            "active" "active" "churned" "active" "active" "active"]})]])
+```
+:::
+
+
+
+```{=html}
+<div style="border:1px solid;padding:20px;"><h3>Sales Dashboard</h3><p>Monthly revenue trends and customer retention</p><div><div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[12000,15000,14000,18000,22000,25000],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["Jan","Feb","Mar","Apr","May","Jun"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"month","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"revenue","showgrid":true},"title":null}, {});</script></div><div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[9,3],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["active","churned"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div></div></div>
+```
+
+
+You can even embed JavaScript for interactive visualizations:
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot [:div
+         [:h3 "Lissajous Curve"]
+         [:p "An animated parametric curve combining two sine waves with different frequencies"]
+         [:canvas#lissajous {:width 400 :height 400
+                             :style {:border "1px solid"
+                                     :background "#f9fafb"}}]
+         [:script "
+           const canvas = document.getElementById('lissajous');
+           const ctx = canvas.getContext('2d');
+           const w = canvas.width;
+           const h = canvas.height;
+
+           function drawLissajous(a, b, delta) {
+             ctx.clearRect(0, 0, w, h);
+             ctx.strokeStyle = '#2563eb';
+             ctx.lineWidth = 2.5;
+             ctx.beginPath();
+
+             for (let t = 0; t < 2 * Math.PI; t += 0.01) {
+               const x = w/2 + 120 * Math.sin(a * t + delta);
+               const y = h/2 + 120 * Math.sin(b * t);
+               if (t === 0) ctx.moveTo(x, y);
+               else ctx.lineTo(x, y);
+             }
+             ctx.stroke();
+           }
+
+           let delta = 0;
+           setInterval(() => {
+             drawLissajous(3, 2, delta);
+             delta += 0.05;
+           }, 50);
+         "]])
+```
+:::
+
+
+
+```{=html}
+<div><h3>Lissajous Curve</h3><p>An animated parametric curve combining two sine waves with different frequencies</p><canvas height="400" id="lissajous" style="background:#f9fafb;border:1px solid;" width="400"></canvas><script>
+           const canvas = document.getElementById('lissajous');
+           const ctx = canvas.getContext('2d');
+           const w = canvas.width;
+           const h = canvas.height;
+
+           function drawLissajous(a, b, delta) {
+             ctx.clearRect(0, 0, w, h);
+             ctx.strokeStyle = '#2563eb';
+             ctx.lineWidth = 2.5;
+             ctx.beginPath();
+
+             for (let t = 0; t < 2 * Math.PI; t += 0.01) {
+               const x = w/2 + 120 * Math.sin(a * t + delta);
+               const y = h/2 + 120 * Math.sin(b * t);
+               if (t === 0) ctx.moveTo(x, y);
+               else ctx.lineTo(x, y);
+             }
+             ctx.stroke();
+           }
+
+           let delta = 0;
+           setInterval(() => {
+             drawLissajous(3, 2, delta);
+             delta += 0.05;
+           }, 50);
+         </script></div>
+```
+
+
+
+## Preparing Data with Tablecloth
+
+Tablecloth can be used to query and transform data before plotting.
+This is useful for filtering, selecting columns, or aggregating data.
+
+Require Tablecloth:
+
+
+::: {.sourceClojure}
+```clojure
+(require '[tablecloth.api :as tc])
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(def athlete-data
+  (tc/dataset {:name ["Ada" "Ben" "Chloe" "Dana" "Eli"]
+               :sport ["track" "track" "swim" "swim" "track"]
+               :score [12.4 11.9 55.2 54.7 12.1]
+               :country ["US" "CA" "US" "UK" "DE"]}))
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(-> athlete-data
+    (tc/select-rows #(< (:score %) 13))
+    (tc/select-columns [:name :score])
+    (g/plot))
+```
+:::
+
+
+
+```{=html}
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[12.4,11.9,12.1],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["Ada","Ben","Eli"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"name","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"score","showgrid":true},"title":null}, {});</script></div>
+```
+
+
+
+::: {.sourceClojure}
+```clojure
+(-> athlete-data
+    (tc/group-by :sport)
+    (tc/mean :score)
+    g/plot)
+```
+:::
+
+
+
+```{=html}
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[12.133333333333333,54.95],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["track","swim"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"$group-name","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"summary","showgrid":true},"title":null}, {});</script></div>
+```
+
+
+See the [Tablecloth Documentation](https://scicloj.github.io/tablecloth/)
+
+
+## Plotly Specs (`g/plotly`)
+
+While `g/plot` is great for instant visualizations, sometimes you need
+more control. The `g/plotly` function returns the inferred Plotly
+specification as a Kindly-annotated map, which you can inspect or modify.
+
+Use `g/plotly` instead of `g/plot` to get the specification:
+
+
+::: {.sourceClojure}
+```clojure
+^:kind/pprint
+(g/plotly {:x [1 2 3 4 5]
+           :y [3 4 5 2 1]})
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+{:data
+ [{:y [3 4 5 2 1],
+   :r nil,
+   :name "",
+   :fill nil,
+   :mode :markers,
+   :width nil,
+   :type "scatter",
+   :theta nil,
+   :z nil,
+   :lon nil,
+   :lat nil,
+   :x [1 2 3 4 5],
+   :text nil}],
+ :layout
+ {:width 500,
+  :height 400,
+  :margin {:t 25},
+  :automargin false,
+  :plot_bgcolor "rgb(235,235,235)",
+  :xaxis {:gridcolor "rgb(255,255,255)", :title :x, :showgrid true},
+  :yaxis {:gridcolor "rgb(255,255,255)", :title :y, :showgrid true},
+  :title nil}}
+
+```
+:::
+
+
+You can modify the spec to customize the visualization:
+
+
+::: {.sourceClojure}
+```clojure
+(-> (g/plotly {:x [1 2 3 4 5]
+               :y [3 4 5 2 1]})
+    (assoc-in [:layout :title :text] "Custom Title")
+    (assoc-in [:data 0 :marker :color] "green")
+    (assoc-in [:data 0 :marker :size] 12)
+    (g/plot))
+```
+:::
+
+
+
+```{=html}
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[3,4,5,2,1],"r":null,"name":"","marker":{"color":"green","size":12},"fill":null,"mode":"markers","width":null,"type":"scatter","theta":null,"z":null,"lon":null,"lat":null,"x":[1,2,3,4,5],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"x","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"y","showgrid":true},"title":{"text":"Custom Title"}}, {});</script></div>
+```
+
+
+Or if you prefer to build a spec from scratch:
+
+
+::: {.sourceClojure}
+```clojure
+(g/plot ^:kind/plotly
+        {:data [{:x ["Jan" "Feb" "Mar" "Apr" "May"]
+                 :y [12000 15000 14000 18000 22000]
+                 :name "Revenue"
+                 :type "bar"}
+                {:x ["Jan" "Feb" "Mar" "Apr" "May"]
+                 :y [10000 13000 12000 15000 18000]
+                 :name "Costs"
+                 :type "scatter"
+                 :mode "lines+markers"}]
+         :layout {:title {:text "Revenue vs Costs"}}})
+```
+:::
+
+
+
+```{=html}
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"x":["Jan","Feb","Mar","Apr","May"],"y":[12000,15000,14000,18000,22000],"name":"Revenue","type":"bar"},{"x":["Jan","Feb","Mar","Apr","May"],"y":[10000,13000,12000,15000,18000],"name":"Costs","type":"scatter","mode":"lines+markers"}], {"title":{"text":"Revenue vs Costs"}}, {});</script></div>
+```
+
+
+For more information see the
+[Plotly Reference](https://plotly.com/javascript/basic-charts/)
+
+
+## Why Glance
+
+Glance is for data explorers who want to visualize
+data without needing to learn plotting APIs.
+
+
+- **Approachable**: No special tooling required; just normal Clojure calls.
+- **Inference-first**: Automatically picks a sensible visualization from your data.
+- **No plotting API**: You don't need to learn Plotly configs to get value.
+- **Powerful when needed**: Compose dashboards with Hiccup; use kinds with Kindly.
+- **Flexible**: Use `g/plot` for instant results, or `g/plotly` to inspect/modify specs.
+- **Ecosystem-ready**: Plays well with Clay and Tablecloth for richer workflows.
+
+Just plot it with `(g/plot your-data)`.
+
+
+```{=html}
+<div style="background-color:grey;height:2px;width:100%;"></div>
+```
+
+
+
+```{=html}
+<div><pre><small><small>source: notebooks/examples.clj</small></small></pre></div>
+```

@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>examples</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="examples_files/libs/clipboard/clipboard.min.js"></script>
+<script src="examples_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="examples_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="examples_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="examples_files/libs/quarto-html/popper.min.js"></script>
+<script src="examples_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="examples_files/libs/quarto-html/anchor.min.js"></script>
+<link href="examples_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="examples_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="examples_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="examples_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="examples_files/libs/bootstrap/bootstrap-12c55688592a112f3831beacbe2a3fdc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introducing-glance" id="toc-introducing-glance" class="nav-link active" data-scroll-target="#introducing-glance">Introducing Glance</a></li>
+  <li><a href="#quick-start-gplot" id="toc-quick-start-gplot" class="nav-link" data-scroll-target="#quick-start-gplot">Quick Start: <code>g/plot</code></a></li>
+  <li><a href="#plot-infered-from-data" id="toc-plot-infered-from-data" class="nav-link" data-scroll-target="#plot-infered-from-data">Plot infered from data</a></li>
+  <li><a href="#multi-column-datasets" id="toc-multi-column-datasets" class="nav-link" data-scroll-target="#multi-column-datasets">Multi-Column Datasets</a></li>
+  <li><a href="#composing-kinds-and-hiccup" id="toc-composing-kinds-and-hiccup" class="nav-link" data-scroll-target="#composing-kinds-and-hiccup">Composing Kinds and Hiccup</a></li>
+  <li><a href="#preparing-data-with-tablecloth" id="toc-preparing-data-with-tablecloth" class="nav-link" data-scroll-target="#preparing-data-with-tablecloth">Preparing Data with Tablecloth</a></li>
+  <li><a href="#plotly-specs-gplotly" id="toc-plotly-specs-gplotly" class="nav-link" data-scroll-target="#plotly-specs-gplotly">Plotly Specs (<code>g/plotly</code>)</a></li>
+  <li><a href="#why-glance" id="toc-why-glance" class="nav-link" data-scroll-target="#why-glance">Why Glance</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+
+
+
+<style></style>
+<style>.printedClojure .sourceCode {
+  background-color: transparent;
+  border-style: none;
+}
+</style>
+<style>.clay-limit-image-width .clay-image {max-width: 100%}
+.clay-side-by-side .sourceCode {margin: 0}
+.clay-side-by-side {margin: 1em 0}
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.20.0/plotly.min.js" type="text/javascript"></script>
+<section id="introducing-glance" class="level2">
+<h2 class="anchored" data-anchor-id="introducing-glance">Introducing Glance</h2>
+<p>Glance just plots your data.</p>
+<p>Philosophy:</p>
+<ul>
+<li>One function: <code>g/plot</code></li>
+<li>Opens a browser window showing your data</li>
+<li>Automatically picks an appropriate chart type</li>
+<li>No plotting API to learn</li>
+</ul>
+</section>
+<section id="quick-start-gplot" class="level2">
+<h2 class="anchored" data-anchor-id="quick-start-gplot">Quick Start: <code>g/plot</code></h2>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">ns</span> examples</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  (<span class="at">:require</span> [scicloj.glance <span class="at">:as</span> g]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Quantitative × Quantitative → scatter plot</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(g/plot {<span class="at">:study-hours</span> [<span class="dv">2</span> <span class="dv">3</span> <span class="dv">5</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">8</span> <span class="dv">7</span> <span class="dv">9</span>]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">:test-score</span> [<span class="dv">65</span> <span class="dv">70</span> <span class="dv">80</span> <span class="dv">75</span> <span class="dv">85</span> <span class="dv">90</span> <span class="dv">88</span> <span class="dv">95</span>]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[65,70,80,75,85,90,88,95],"r":null,"name":"","fill":null,"mode":"markers","width":null,"type":"scatter","theta":null,"z":null,"lon":null,"lat":null,"x":[2,3,5,4,6,8,7,9],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"study-hours","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"test-score","showgrid":true},"title":null}, {});</script></div>
+</section>
+<section id="plot-infered-from-data" class="level2">
+<h2 class="anchored" data-anchor-id="plot-infered-from-data">Plot infered from data</h2>
+<p>Many numbers → histogram</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(g/plot {<span class="at">:temperatures</span> [<span class="fl">16.2</span> <span class="fl">17.5</span> <span class="fl">18.1</span> <span class="fl">19.3</span> <span class="fl">20.8</span> <span class="fl">22.4</span> <span class="fl">24.1</span> <span class="fl">25.7</span> <span class="fl">26.3</span> <span class="fl">27.8</span> <span class="fl">28.5</span> <span class="fl">29.2</span> <span class="fl">30.1</span>]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[2,1,1,1,1,1,1,1,2,2],"r":null,"name":"","fill":null,"mode":null,"width":[1.3900000000000006,1.3900000000000006,1.3900000000000006,1.3900000000000006,1.389999999999997,1.3900000000000006,1.3900000000000006,1.3900000000000006,1.3900000000000006,1.3900000000000006],"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":[16.895,18.285,19.675,21.065,22.455,23.845,25.235,26.625,28.015,29.405],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"temperatures","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div>
+<p>A few unique values → bar chart with frequencies</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>(g/plot {<span class="at">:dice-rolls</span> [<span class="dv">1</span> <span class="dv">3</span> <span class="dv">2</span> <span class="dv">6</span> <span class="dv">4</span> <span class="dv">3</span> <span class="dv">2</span> <span class="dv">1</span> <span class="dv">5</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">1</span>]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[3,3,4,2,1,2],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":[1,2,3,4,5,6],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div>
+<p>Time series → line chart</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(g/plot {<span class="at">:date</span> [<span class="st">"2024-01-01"</span> <span class="st">"2024-01-02"</span> <span class="st">"2024-01-03"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                <span class="st">"2024-01-04"</span> <span class="st">"2024-01-05"</span> <span class="st">"2024-01-06"</span> <span class="st">"2024-01-07"</span>]</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">:visitors</span> [<span class="dv">120</span> <span class="dv">132</span> <span class="dv">128</span> <span class="dv">150</span> <span class="dv">170</span> <span class="dv">165</span> <span class="dv">180</span>]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[120,132,128,150,170,165,180],"r":null,"name":"","fill":null,"mode":"lines","width":null,"type":"scatter","theta":null,"z":null,"lon":null,"lat":null,"x":["2024-01-01","2024-01-02","2024-01-03","2024-01-04","2024-01-05","2024-01-06","2024-01-07"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"date","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"visitors","showgrid":true},"title":null}, {});</script></div>
+<p>Pass data as columns or rows</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>(g/plot [{<span class="at">:date</span> <span class="st">"2024-01-01"</span> <span class="at">:visitors</span> <span class="dv">120</span>}</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>         {<span class="at">:date</span> <span class="st">"2024-01-02"</span> <span class="at">:visitors</span> <span class="dv">132</span>}</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>         {<span class="at">:date</span> <span class="st">"2024-01-03"</span> <span class="at">:visitors</span> <span class="dv">128</span>}</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>         {<span class="at">:date</span> <span class="st">"2024-01-04"</span> <span class="at">:visitors</span> <span class="dv">150</span>}</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>         {<span class="at">:date</span> <span class="st">"2024-01-05"</span> <span class="at">:visitors</span> <span class="dv">170</span>}</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>         {<span class="at">:date</span> <span class="st">"2024-01-06"</span> <span class="at">:visitors</span> <span class="dv">165</span>}</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>         {<span class="at">:date</span> <span class="st">"2024-01-07"</span> <span class="at">:visitors</span> <span class="dv">180</span>}])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[120,132,128,150,170,165,180],"r":null,"name":"","fill":null,"mode":"lines","width":null,"type":"scatter","theta":null,"z":null,"lon":null,"lat":null,"x":["2024-01-01","2024-01-02","2024-01-03","2024-01-04","2024-01-05","2024-01-06","2024-01-07"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"date","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"visitors","showgrid":true},"title":null}, {});</script></div>
+<p>Categorical data → bar chart of frequencies</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(g/plot {<span class="at">:fruits</span> [<span class="st">"apple"</span> <span class="st">"banana"</span> <span class="st">"apple"</span> <span class="st">"kiwi"</span> <span class="st">"banana"</span> <span class="st">"apple"</span> <span class="st">"kiwi"</span> <span class="st">"kiwi"</span>]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[3,2,3],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["apple","banana","kiwi"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div>
+<p>Load a local CSV file</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>(g/plot <span class="st">"datasets/sample.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[12000,15000,14000,18000,22000],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["Jan","Feb","Mar","Apr","May"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"month","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"revenue","showgrid":true},"title":null}, {});</script></div>
+<p>A single number</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>(g/plot <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="printedClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>A vector</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>(g/plot [<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[4,3,2,1,1],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":[1,2,3,4,5],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div>
+<p>Categorical × Categorical → heatmap shows contingency table</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>(g/plot {<span class="at">:activity</span> [<span class="st">"running"</span> <span class="st">"running"</span> <span class="st">"running"</span> <span class="st">"running"</span> <span class="st">"running"</span> <span class="st">"running"</span> <span class="st">"cycling"</span> <span class="st">"cycling"</span> <span class="st">"cycling"</span> <span class="st">"cycling"</span> <span class="st">"cycling"</span> <span class="st">"cycling"</span>]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">:weather</span> [<span class="st">"sunny"</span> <span class="st">"sunny"</span> <span class="st">"sunny"</span> <span class="st">"sunny"</span> <span class="st">"sunny"</span> <span class="st">"rainy"</span> <span class="st">"sunny"</span> <span class="st">"sunny"</span> <span class="st">"rainy"</span> <span class="st">"rainy"</span> <span class="st">"rainy"</span> <span class="st">"rainy"</span>]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"type":"heatmap","x":["cycling","running"],"y":["rainy","sunny"],"z":[[4,1],[2,5]],"colorscale":"Viridis","hoverongaps":false}], {"xaxis":{"title":"activity"},"yaxis":{"title":"weather"}}, {});</script></div>
+<p>Categorical × Quantitative → grouped bar chart</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>(g/plot {<span class="at">:region</span> [<span class="st">"North"</span> <span class="st">"South"</span> <span class="st">"East"</span> <span class="st">"North"</span> <span class="st">"South"</span> <span class="st">"East"</span> <span class="st">"West"</span> <span class="st">"North"</span>]</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">:sales</span> [<span class="dv">45</span> <span class="dv">62</span> <span class="dv">38</span> <span class="dv">51</span> <span class="dv">58</span> <span class="dv">42</span> <span class="dv">48</span> <span class="dv">55</span>]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[45,62,38,51,58,42,48,55],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["North","South","East","North","South","East","West","North"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"region","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"sales","showgrid":true},"title":null}, {});</script></div>
+<p>Glance picks an appropriate chart for the data.</p>
+</section>
+<section id="multi-column-datasets" class="level2">
+<h2 class="anchored" data-anchor-id="multi-column-datasets">Multi-Column Datasets</h2>
+<p>With 3+ columns, Glance creates a summary view with statistics and individual visualizations for each column</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>(g/plot {<span class="at">:employee-id</span> [<span class="dv">101</span> <span class="dv">102</span> <span class="dv">103</span> <span class="dv">104</span> <span class="dv">105</span> <span class="dv">106</span> <span class="dv">107</span> <span class="dv">108</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">:department</span> [<span class="st">"Engineering"</span> <span class="st">"Sales"</span> <span class="st">"Engineering"</span> <span class="st">"Marketing"</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Sales"</span> <span class="st">"Engineering"</span> <span class="st">"Marketing"</span> <span class="st">"Sales"</span>]</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">:salary</span> [<span class="dv">95000</span> <span class="dv">72000</span> <span class="dv">88000</span> <span class="dv">65000</span> <span class="dv">78000</span> <span class="dv">102000</span> <span class="dv">61000</span> <span class="dv">75000</span>]</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">:years-experience</span> [<span class="dv">5</span> <span class="dv">3</span> <span class="dv">7</span> <span class="dv">2</span> <span class="dv">4</span> <span class="dv">9</span> <span class="dv">1</span> <span class="dv">3</span>]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="margin:0 auto;max-width:800px;"><div style="border:1px solid #ddd;border-radius:5px;margin-bottom:20px;padding:15px;"><div style="align-items:center;display:flex;gap:20px;"><div style="flex:1 1 auto;"><h4 style="margin:0;" class="anchored">employee-id</h4><div style="color:#666;font-size:12px;margin-top:5px;">n=8, min=101.00, mean=104.50, max=108.00</div></div><div style="flex:0 0 auto;text-align:right;"><div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[1,1,1,1,1,1,1,1],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":[101,102,103,104,105,106,107,108],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div></div></div></div><div style="border:1px solid #ddd;border-radius:5px;margin-bottom:20px;padding:15px;"><div style="align-items:center;display:flex;gap:20px;"><div style="flex:1 1 auto;"><h4 style="margin:0;" class="anchored">department</h4><div style="color:#666;font-size:12px;margin-top:5px;">n=8, unique=3</div></div><div style="flex:0 0 auto;text-align:right;"><div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[3,2,3],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["Engineering","Marketing","Sales"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div></div></div></div><div style="border:1px solid #ddd;border-radius:5px;margin-bottom:20px;padding:15px;"><div style="align-items:center;display:flex;gap:20px;"><div style="flex:1 1 auto;"><h4 style="margin:0;" class="anchored">salary</h4><div style="color:#666;font-size:12px;margin-top:5px;">n=8, min=61000.00, mean=79500.00, max=102000.00</div></div><div style="flex:0 0 auto;text-align:right;"><div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[1,1,1,1,1,1,1,1],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":[61000,65000,72000,75000,78000,88000,95000,102000],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div></div></div></div><div style="border:1px solid #ddd;border-radius:5px;margin-bottom:20px;padding:15px;"><div style="align-items:center;display:flex;gap:20px;"><div style="flex:1 1 auto;"><h4 style="margin:0;" class="anchored">years-experience</h4><div style="color:#666;font-size:12px;margin-top:5px;">n=8, min=1.00, mean=4.25, max=9.00</div></div><div style="flex:0 0 auto;text-align:right;"><div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[1,1,2,1,1,1,1],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":[1,2,3,4,5,7,9],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div></div></div></div></div>
+</section>
+<section id="composing-kinds-and-hiccup" class="level2">
+<h2 class="anchored" data-anchor-id="composing-kinds-and-hiccup">Composing Kinds and Hiccup</h2>
+<p>You can use <a href="https://scicloj.github.io/kindly-noted/kindly">Kindly</a> annotations to request other visualizations:</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>(g/plot ^<span class="at">:kind/table</span> {<span class="at">:product</span> [<span class="st">"Widget"</span> <span class="st">"Gadget"</span> <span class="st">"Doohickey"</span>]</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">:price</span> [<span class="fl">19.99</span> <span class="fl">29.99</span> <span class="fl">14.99</span>]</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">:stock</span> [<span class="dv">45</span> <span class="dv">23</span> <span class="dv">67</span>]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="clay-table">
+<div class="table-responsive">
+<table class="table table-hover clay-table caption-top">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">product</th>
+<th data-quarto-table-cell-role="th">price</th>
+<th data-quarto-table-cell-role="th">stock</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Widget</td>
+<td>19.99</td>
+<td>45</td>
+</tr>
+<tr class="even">
+<td>Gadget</td>
+<td>29.99</td>
+<td>23</td>
+</tr>
+<tr class="odd">
+<td>Doohickey</td>
+<td>14.99</td>
+<td>67</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>See <a href="https://scicloj.github.io/clay/clay_book.examples.html">Clay Examples</a> for examples of other interesting kinds.</p>
+<p>Beyond simple plots, you can create dashboards using Hiccup markup. Nest multiple plots in custom HTML layouts:</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>(g/plot [<span class="at">:div</span> {<span class="at">:style</span> {<span class="at">:border</span> <span class="st">"1px solid"</span> <span class="at">:padding</span> <span class="st">"20px"</span>}}</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>         [<span class="at">:h3</span> <span class="st">"Sales Dashboard"</span>]</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>         [<span class="at">:p</span> <span class="st">"Monthly revenue trends and customer retention"</span>]</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>         [<span class="at">:div</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>          (g/plot {<span class="at">:month</span> [<span class="st">"Jan"</span> <span class="st">"Feb"</span> <span class="st">"Mar"</span> <span class="st">"Apr"</span> <span class="st">"May"</span> <span class="st">"Jun"</span>]</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">:revenue</span> [<span class="dv">12000</span> <span class="dv">15000</span> <span class="dv">14000</span> <span class="dv">18000</span> <span class="dv">22000</span> <span class="dv">25000</span>]})</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>          (g/plot {<span class="at">:status</span> [<span class="st">"active"</span> <span class="st">"active"</span> <span class="st">"churned"</span> <span class="st">"active"</span> <span class="st">"active"</span> <span class="st">"churned"</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"active"</span> <span class="st">"active"</span> <span class="st">"churned"</span> <span class="st">"active"</span> <span class="st">"active"</span> <span class="st">"active"</span>]})]])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="border:1px solid;padding:20px;"><h3 class="anchored">Sales Dashboard</h3><p>Monthly revenue trends and customer retention</p><div><div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[12000,15000,14000,18000,22000,25000],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["Jan","Feb","Mar","Apr","May","Jun"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"month","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"revenue","showgrid":true},"title":null}, {});</script></div><div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[9,3],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["active","churned"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"category","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"count","showgrid":true},"title":null}, {});</script></div></div></div>
+<p>You can even embed JavaScript for interactive visualizations:</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>(g/plot [<span class="at">:div</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>         [<span class="at">:h3</span> <span class="st">"Lissajous Curve"</span>]</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>         [<span class="at">:p</span> <span class="st">"An animated parametric curve combining two sine waves with different frequencies"</span>]</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>         [<span class="at">:canvas#</span>lissajous {<span class="at">:width</span> <span class="dv">400</span> <span class="at">:height</span> <span class="dv">400</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">:style</span> {<span class="at">:border</span> <span class="st">"1px solid"</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">:background</span> <span class="st">"#f9fafb"</span>}}]</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>         [<span class="at">:script</span> <span class="st">"</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="st">           const canvas = document.getElementById('lissajous');</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="st">           const ctx = canvas.getContext('2d');</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="st">           const w = canvas.width;</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="st">           const h = canvas.height;</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="st">           function drawLissajous(a, b, delta) {</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="st">             ctx.clearRect(0, 0, w, h);</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="st">             ctx.strokeStyle = '#2563eb';</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="st">             ctx.lineWidth = 2.5;</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="st">             ctx.beginPath();</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="st">             for (let t = 0; t &lt; 2 * Math.PI; t += 0.01) {</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="st">               const x = w/2 + 120 * Math.sin(a * t + delta);</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="st">               const y = h/2 + 120 * Math.sin(b * t);</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="st">               if (t === 0) ctx.moveTo(x, y);</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="st">               else ctx.lineTo(x, y);</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="st">             }</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="st">             ctx.stroke();</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a><span class="st">           }</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="st">           let delta = 0;</span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a><span class="st">           setInterval(() =&gt; {</span></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a><span class="st">             drawLissajous(3, 2, delta);</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="st">             delta += 0.05;</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="st">           }, 50);</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a><span class="st">         "</span>]])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div><h3 class="anchored">Lissajous Curve</h3><p>An animated parametric curve combining two sine waves with different frequencies</p><canvas height="400" id="lissajous" style="background:#f9fafb;border:1px solid;" width="400"></canvas><script>
+           const canvas = document.getElementById('lissajous');
+           const ctx = canvas.getContext('2d');
+           const w = canvas.width;
+           const h = canvas.height;
+
+           function drawLissajous(a, b, delta) {
+             ctx.clearRect(0, 0, w, h);
+             ctx.strokeStyle = '#2563eb';
+             ctx.lineWidth = 2.5;
+             ctx.beginPath();
+
+             for (let t = 0; t < 2 * Math.PI; t += 0.01) {
+               const x = w/2 + 120 * Math.sin(a * t + delta);
+               const y = h/2 + 120 * Math.sin(b * t);
+               if (t === 0) ctx.moveTo(x, y);
+               else ctx.lineTo(x, y);
+             }
+             ctx.stroke();
+           }
+
+           let delta = 0;
+           setInterval(() => {
+             drawLissajous(3, 2, delta);
+             delta += 0.05;
+           }, 50);
+         </script></div>
+</section>
+<section id="preparing-data-with-tablecloth" class="level2">
+<h2 class="anchored" data-anchor-id="preparing-data-with-tablecloth">Preparing Data with Tablecloth</h2>
+<p>Tablecloth can be used to query and transform data before plotting. This is useful for filtering, selecting columns, or aggregating data.</p>
+<p>Require Tablecloth:</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">require</span> '[tablecloth.api <span class="at">:as</span> tc])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>(<span class="bu">def</span><span class="fu"> athlete-data</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  (tc/dataset {<span class="at">:name</span> [<span class="st">"Ada"</span> <span class="st">"Ben"</span> <span class="st">"Chloe"</span> <span class="st">"Dana"</span> <span class="st">"Eli"</span>]</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">:sport</span> [<span class="st">"track"</span> <span class="st">"track"</span> <span class="st">"swim"</span> <span class="st">"swim"</span> <span class="st">"track"</span>]</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">:score</span> [<span class="fl">12.4</span> <span class="fl">11.9</span> <span class="fl">55.2</span> <span class="fl">54.7</span> <span class="fl">12.1</span>]</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">:country</span> [<span class="st">"US"</span> <span class="st">"CA"</span> <span class="st">"US"</span> <span class="st">"UK"</span> <span class="st">"DE"</span>]}))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> athlete-data</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    (tc/select-rows #(<span class="kw">&lt;</span> (<span class="at">:score</span> <span class="va">%</span>) <span class="dv">13</span>))</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    (tc/select-columns [<span class="at">:name</span> <span class="at">:score</span>])</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    (g/plot))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[12.4,11.9,12.1],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["Ada","Ben","Eli"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"name","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"score","showgrid":true},"title":null}, {});</script></div>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> athlete-data</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    (tc/group-by <span class="at">:sport</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    (tc/mean <span class="at">:score</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    g/plot)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[12.133333333333333,54.95],"r":null,"name":"","fill":null,"mode":null,"width":null,"type":"bar","theta":null,"z":null,"lon":null,"lat":null,"x":["track","swim"],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"$group-name","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"summary","showgrid":true},"title":null}, {});</script></div>
+<p>See the <a href="https://scicloj.github.io/tablecloth/">Tablecloth Documentation</a></p>
+</section>
+<section id="plotly-specs-gplotly" class="level2">
+<h2 class="anchored" data-anchor-id="plotly-specs-gplotly">Plotly Specs (<code>g/plotly</code>)</h2>
+<p>While <code>g/plot</code> is great for instant visualizations, sometimes you need more control. The <code>g/plotly</code> function returns the inferred Plotly specification as a Kindly-annotated map, which you can inspect or modify.</p>
+<p>Use <code>g/plotly</code> instead of <code>g/plot</code> to get the specification:</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>^<span class="at">:kind/pprint</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>(g/plotly {<span class="at">:x</span> [<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span>]</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">:y</span> [<span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">2</span> <span class="dv">1</span>]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="printedClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:data</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a> [{<span class="at">:y</span> [<span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">2</span> <span class="dv">1</span>],</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>   <span class="at">:r</span> <span class="va">nil</span>,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>   <span class="at">:name</span> <span class="st">""</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>   <span class="at">:fill</span> <span class="va">nil</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>   <span class="at">:mode</span> <span class="at">:markers</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>   <span class="at">:width</span> <span class="va">nil</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>   <span class="at">:type</span> <span class="st">"scatter"</span>,</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>   <span class="at">:theta</span> <span class="va">nil</span>,</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>   <span class="at">:z</span> <span class="va">nil</span>,</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>   <span class="at">:lon</span> <span class="va">nil</span>,</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>   <span class="at">:lat</span> <span class="va">nil</span>,</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>   <span class="at">:x</span> [<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span>],</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>   <span class="at">:text</span> <span class="va">nil</span>}],</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a> <span class="at">:layout</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a> {<span class="at">:width</span> <span class="dv">500</span>,</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">:height</span> <span class="dv">400</span>,</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">:margin</span> {<span class="at">:t</span> <span class="dv">25</span>},</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">:automargin</span> <span class="va">false</span>,</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">:plot</span>_bgcolor <span class="st">"rgb(235,235,235)"</span>,</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">:xaxis</span> {<span class="at">:gridcolor</span> <span class="st">"rgb(255,255,255)"</span>, <span class="at">:title</span> <span class="at">:x</span>, <span class="at">:showgrid</span> <span class="va">true</span>},</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">:yaxis</span> {<span class="at">:gridcolor</span> <span class="st">"rgb(255,255,255)"</span>, <span class="at">:title</span> <span class="at">:y</span>, <span class="at">:showgrid</span> <span class="va">true</span>},</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">:title</span> <span class="va">nil</span>}}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You can modify the spec to customize the visualization:</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> (g/plotly {<span class="at">:x</span> [<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span>]</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">:y</span> [<span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">2</span> <span class="dv">1</span>]})</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">assoc-in</span> [<span class="at">:layout</span> <span class="at">:title</span> <span class="at">:text</span>] <span class="st">"Custom Title"</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">assoc-in</span> [<span class="at">:data</span> <span class="dv">0</span> <span class="at">:marker</span> <span class="at">:color</span>] <span class="st">"green"</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">assoc-in</span> [<span class="at">:data</span> <span class="dv">0</span> <span class="at">:marker</span> <span class="at">:size</span>] <span class="dv">12</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    (g/plot))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"y":[3,4,5,2,1],"r":null,"name":"","marker":{"color":"green","size":12},"fill":null,"mode":"markers","width":null,"type":"scatter","theta":null,"z":null,"lon":null,"lat":null,"x":[1,2,3,4,5],"text":null}], {"width":500,"height":400,"margin":{"t":25},"automargin":false,"plot_bgcolor":"rgb(235,235,235)","xaxis":{"gridcolor":"rgb(255,255,255)","title":"x","showgrid":true},"yaxis":{"gridcolor":"rgb(255,255,255)","title":"y","showgrid":true},"title":{"text":"Custom Title"}}, {});</script></div>
+<p>Or if you prefer to build a spec from scratch:</p>
+<div class="sourceClojure">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>(g/plot ^<span class="at">:kind/plotly</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>        {<span class="at">:data</span> [{<span class="at">:x</span> [<span class="st">"Jan"</span> <span class="st">"Feb"</span> <span class="st">"Mar"</span> <span class="st">"Apr"</span> <span class="st">"May"</span>]</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">:y</span> [<span class="dv">12000</span> <span class="dv">15000</span> <span class="dv">14000</span> <span class="dv">18000</span> <span class="dv">22000</span>]</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">:name</span> <span class="st">"Revenue"</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">:type</span> <span class="st">"bar"</span>}</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                {<span class="at">:x</span> [<span class="st">"Jan"</span> <span class="st">"Feb"</span> <span class="st">"Mar"</span> <span class="st">"Apr"</span> <span class="st">"May"</span>]</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">:y</span> [<span class="dv">10000</span> <span class="dv">13000</span> <span class="dv">12000</span> <span class="dv">15000</span> <span class="dv">18000</span>]</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">:name</span> <span class="st">"Costs"</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">:type</span> <span class="st">"scatter"</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">:mode</span> <span class="st">"lines+markers"</span>}]</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">:layout</span> {<span class="at">:title</span> {<span class="at">:text</span> <span class="st">"Revenue vs Costs"</span>}}})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="height:auto;width:100%;"><script>Plotly.newPlot(document.currentScript.parentElement, [{"x":["Jan","Feb","Mar","Apr","May"],"y":[12000,15000,14000,18000,22000],"name":"Revenue","type":"bar"},{"x":["Jan","Feb","Mar","Apr","May"],"y":[10000,13000,12000,15000,18000],"name":"Costs","type":"scatter","mode":"lines+markers"}], {"title":{"text":"Revenue vs Costs"}}, {});</script></div>
+<p>For more information see the <a href="https://plotly.com/javascript/basic-charts/">Plotly Reference</a></p>
+</section>
+<section id="why-glance" class="level2">
+<h2 class="anchored" data-anchor-id="why-glance">Why Glance</h2>
+<p>Glance is for data explorers who want to visualize data without needing to learn plotting APIs.</p>
+<ul>
+<li><strong>Approachable</strong>: No special tooling required; just normal Clojure calls.</li>
+<li><strong>Inference-first</strong>: Automatically picks a sensible visualization from your data.</li>
+<li><strong>No plotting API</strong>: You don’t need to learn Plotly configs to get value.</li>
+<li><strong>Powerful when needed</strong>: Compose dashboards with Hiccup; use kinds with Kindly.</li>
+<li><strong>Flexible</strong>: Use <code>g/plot</code> for instant results, or <code>g/plotly</code> to inspect/modify specs.</li>
+<li><strong>Ecosystem-ready</strong>: Plays well with Clay and Tablecloth for richer workflows.</li>
+</ul>
+<p>Just plot it with <code>(g/plot your-data)</code>.</p>
+<div style="background-color:grey;height:2px;width:100%;"></div>
+<div><pre><small><small>source: notebooks/examples.clj</small></small></pre></div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
