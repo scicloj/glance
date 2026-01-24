@@ -1,12 +1,9 @@
 # scicloj.glance
 
-> Take a quick glance at your data.
+> Glance just plots your data.
 
 `scicloj.glance` is a Clojure library for **getting a plot on the screen with minimal ceremony**.
-It is designed as a friendly on‑ramp for people who just want to *see their data* without first learning the details of Noj.
-
-Glance is part of the Noj collection of libraries, whose name comes from the North Star (Cynosure): something that helps you orient yourself.
-Glance follows the same idea, it helps you quickly orient yourself in your data.
+It’s a friendly on‑ramp for people who just want to *see their data*.
 
 ## Rationale
 
@@ -14,14 +11,12 @@ Many users reach visualization with a simple goal:
 
 > “I have some data. I want a chart.”
 
-While the Clojure data‑science stack is powerful, getting started can feel heavy if all you want is a quick plot.
-`scicloj.glance` deliberately optimizes for:
+Glance deliberately optimizes for:
 
-* **Low activation energy** – one obvious function to call; you shouldn't need to decide much
+* **One function** – call `g/plot`
 * **Plain Clojure data** – vectors, maps, sequences
-* **No required knowledge** of Clay, Plotly, or Tablecloth
-
-The visualization opens automatically in your browser. The goal is immediacy.
+* **Automatic chart inference** – picks a sensible visualization
+* **No plotting API to learn** – opens in your browser immediately
 
 ## Installation
 
@@ -30,12 +25,6 @@ Add Glance to your project dependencies:
 **deps.edn:**
 ```clojure
 org.scicloj/glance {:mvn/version "TODO"}
-```
-
-**Alternatively**, you can depend on [Noj](https://scicloj.github.io/noj/), which includes Glance along with the broader data-science stack:
-
-```clojure
-org.scicloj/noj {:mvn/version "TODO"}
 ```
 
 ## Usage
@@ -47,6 +36,8 @@ org.scicloj/noj {:mvn/version "TODO"}
 
 (g/plot {:x [1 2 3 4]
          :y [10 12 9 14]})
+
+(g/plot "data.csv")
 ```
 
 Glance tries to **do the obvious thing** based on the shape of your data:
@@ -56,31 +47,28 @@ Glance tries to **do the obvious thing** based on the shape of your data:
 * A sequence of maps → columns inferred automatically
 * A CSV file (filename or URL) → automatically loaded and visualized
 
-```clojure
-(g/plot "data.csv")
-```
-
-## Documentation
+## Documentation and Examples
 
 See [Glance Documentation](https://scicloj.github.io/glance/)
-or work through the notebook [notebooks/index.clj](notebooks/index.clj) for more examples.
+or work through the notebook [notebooks/index.clj](notebooks/index.clj) for examples and guidance.
 
-## Relationship to Clay, Tableplot and Noj
+## Relationship to Clay, Kindly, Tablecloth, and Noj
 
-Internally, Glance builds on **Clay and Tableplot** for rendering,
-but does not require you to invoke Clay yourself.
-
-If and when you want more control, you can graduate naturally to Clay, Tableplot, and the rest of Noj.
-
-Glance is usable as a standalone library, and is included in Noj.
+Internally, Glance uses **Clay** to serve content in the browser.
+It plays well with **Kindly** (for kinds/annotations) and **Tablecloth** (for data prep).
+You do not need to use any of these directly to get value from Glance.
+They are there when you want more control.
+In the future Glance might be useful as part of Noj, the collection of Clojure data science libraries.
 
 ## Status
 
-`scicloj.glance` is intentionally small and opinionated.
-Its surface area is expected to grow slowly, if at all.
+`scicloj.glance` is intentionally narrow.
+Feedback, ideas, and naming discussions are welcome.
 
-Feedback, ideas, and naming discussions are welcome — especially from people new to the ecosystem.
+The best place to discuss Glance is [#noj-dev on Zulip](https://clojurians.zulipchat.com/#narrow/channel/321125-noj-dev).
 
 ## License
+
+Copyright © 2025 Scicloj
 
 EPL-2.0
