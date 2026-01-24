@@ -1,82 +1,82 @@
+(ns examples)
+
+;; # Introducing Glance
+;;
+;; Glance just plots your data.
+;;
+;; Philosophy:
+;;
+;; - One function: `g/plot`
+;; - Opens a browser window showing your data
+;; - Automatically picks an appropriate chart type
+;; - No plotting API to learn
+
+;; ## 1. Quick Start: `g/plot`
+
 (ns examples
   (:require [scicloj.glance :as g]))
 
-;; # Glance: Data Visualization at a Glance
-;;
-;; Glance is a minimalist data visualization library that automatically
-;; chooses appropriate visualizations based on your data structure and types.
-;;
-;; Philosophy:
-;; - One function: `g/plot`
-;; - Automatic geometry selection (scatter, histogram, bar, heatmap)
-;; - Sensible defaults, no configuration required
-;; - Built on Tableplot/Plotly for quality output
-;;
-;; Just pass your data and get an appropriate visualization instantly.
-
-;; ## Getting Started
-
-;; The simplest case: a single number
-
-(g/plot 1)
-
-;; A vector of numbers → histogram to show distribution
-
-(g/plot [1 2 3 4 5])
-
-;; Two vectors in a map → scatter plot to reveal relationships
-
-(g/plot {:x [1 2 3 4 5]
-         :y [3 4 5 2 1]})
-
-;; ## Automatic Geometry Selection
-
-;; Glance looks at your data types and structure to pick the right visualization.
-;; Here's how it works:
-
-;; ### Single Column: Distribution Visualizations
-
-;; Integers with few unique values → bar chart with frequencies
-
-(g/plot {:dice-rolls [1 3 2 6 4 3 2 1 5 3 4 6 2 3 1]})
-
-;; Many numbers → histogram with intelligent binning
-
-(g/plot {:temperatures [22.1 23.5 21.8 24.2 23.1 22.9 24.5 23.8 22.4 23.2 24.1 22.7 23.6]})
-
-;; Categorical data → bar chart showing frequency counts
-
-(g/plot {:fruits ["apple" "banana" "apple" "kiwi" "banana" "apple" "kiwi" "kiwi"]})
-
-;; ### Two Columns: Relationship Visualizations
-
-;; The visualization changes based on what types you're comparing:
-
-;; Quantitative × Quantitative → scatter plot reveals correlation
+;; Quantitative × Quantitative → scatter plot
 
 (g/plot {:study-hours [2 3 5 4 6 8 7 9]
          :test-score [65 70 80 75 85 90 88 95]})
 
+;; Many numbers → histogram
+
+(g/plot {:temperatures [16.2 17.5 18.1 19.3 20.8 22.4 24.1 25.7 26.3 27.8 28.5 29.2 30.1]})
+
+;; A few unique values → bar chart with frequencies
+
+(g/plot {:dice-rolls [1 3 2 6 4 3 2 1 5 3 4 6 2 3 1]})
+
+;; Time series → line chart
+
+(g/plot {:date ["2024-01-01" "2024-01-02" "2024-01-03"
+                "2024-01-04" "2024-01-05" "2024-01-06" "2024-01-07"]
+         :visitors [120 132 128 150 170 165 180]})
+
+;; Pass data as columns or rows
+
+(g/plot [{:date "2024-01-01" :visitors 120}
+         {:date "2024-01-02" :visitors 132}
+         {:date "2024-01-03" :visitors 128}
+         {:date "2024-01-04" :visitors 150}
+         {:date "2024-01-05" :visitors 170}
+         {:date "2024-01-06" :visitors 165}
+         {:date "2024-01-07" :visitors 180}])
+
+;; Categorical data → bar chart of frequencies
+
+(g/plot {:fruits ["apple" "banana" "apple" "kiwi" "banana" "apple" "kiwi" "kiwi"]})
+
+;; Load a local CSV file
+
+(g/plot "datasets/sample.csv")
+
+;; A single number
+
+(g/plot 1)
+
+;; A vector
+
+(g/plot [1 2 3 4 5 1 2 3 1 2 1])
+
 ;; Categorical × Categorical → heatmap shows contingency table
 
-(g/plot {:shirt-size ["S" "M" "L" "S" "M" "L" "XL" "M"]
-         :color-preference ["blue" "red" "blue" "green" "red" "blue" "green" "blue"]})
+(g/plot {:activity ["running" "running" "running" "running" "running" "running" "cycling" "cycling" "cycling" "cycling" "cycling" "cycling"]
+         :weather ["sunny" "sunny" "sunny" "sunny" "sunny" "rainy" "sunny" "sunny" "rainy" "rainy" "rainy" "rainy"]})
 
 ;; Categorical × Quantitative → grouped bar chart
 
 (g/plot {:region ["North" "South" "East" "North" "South" "East" "West" "North"]
          :sales [45 62 38 51 58 42 48 55]})
 
-;; ## Multi-Column Datasets
+;; Glance picks an appropriate chart for the data.
+
+;; ## 2. Multi-Column Datasets
 
 ;; With 3+ columns, Glance creates a summary view with statistics
 ;; and individual visualizations for each column
-
-(g/plot {:player ["Alice" "Bob" "Carol" "Dave" "Eve"]
-         :level [12 18 15 22 19]
-         :score [1250 2100 1680 2890 2340]})
-
-;; Works great for exploratory data analysis on larger tables
 
 (g/plot {:employee-id [101 102 103 104 105 106 107 108]
          :department ["Engineering" "Sales" "Engineering" "Marketing"
@@ -84,29 +84,29 @@
          :salary [95000 72000 88000 65000 78000 102000 61000 75000]
          :years-experience [5 3 7 2 4 9 1 3]})
 
-;; ## Loading External Data
+;; ## 3. Composing Kinds and Hiccup
 
-;; Load CSV files directly from URLs or local paths
+;; You can use [Kindly](https://scicloj.github.io/kindly-noted/kindly)
+;; annotations to request other visualizations:
 
-(g/plot "https://drive.google.com/uc?id=13a2WyLoGxQKXbN_AIjrOogIlQKNe9uPm&export=download")
+(g/plot ^:kind/table {:product ["Widget" "Gadget" "Doohickey"]
+                      :price [19.99 29.99 14.99]
+                      :stock [45 23 67]})
 
-;; Glance automatically detects the file type and loads the data
-
-;; ## Advanced Layouts with Hiccup
+;; See [Clay Examples](https://scicloj.github.io/clay/clay_book.examples.html)
+;; for examples of other interesting kinds.
 
 ;; Beyond simple plots, you can create dashboards using Hiccup markup.
 ;; Nest multiple plots in custom HTML layouts:
 
-(g/plot [:div
+(g/plot [:div {:style {:border "1px solid" :padding "20px"}}
          [:h3 "Sales Dashboard"]
          [:p "Monthly revenue trends and customer retention"]
-         [:table
-          [:tbody
-           [:tr
-            [:td (g/plot {:month ["Jan" "Feb" "Mar" "Apr" "May" "Jun"]
-                          :revenue [12000 15000 14000 18000 22000 25000]})]
-            [:td (g/plot {:status ["active" "active" "churned" "active" "active" "churned"
-                                   "active" "active" "churned" "active" "active" "active"]})]]]]])
+         [:div
+          (g/plot {:month ["Jan" "Feb" "Mar" "Apr" "May" "Jun"]
+                   :revenue [12000 15000 14000 18000 22000 25000]})
+          (g/plot {:status ["active" "active" "churned" "active" "active" "churned"
+                            "active" "active" "churned" "active" "active" "active"]})]])
 
 ;; You can even embed JavaScript for interactive visualizations:
 
@@ -144,39 +144,81 @@
            }, 50);
          "]])
 
-;; ## Edge Cases & Data Cleaning
+;; ### Preparing Data with Tablecloth
 
-;; Glance handles common data quality issues automatically:
+;; Tablecloth can be used to query and transform data before plotting.
+;; This is useful for filtering, selecting columns, or aggregating data.
 
-;; Nil values are filtered out before visualization
+;; Require Tablecloth:
 
-(g/plot {:sensor-readings [23 25 nil 24 26 nil 27]})
+(require '[tablecloth.api :as tc])
 
-;; Single repeated value still produces a meaningful chart
+(def athlete-data
+  (tc/dataset {:name ["Ada" "Ben" "Chloe" "Dana" "Eli"]
+               :sport ["track" "track" "swim" "swim" "track"]
+               :score [12.4 11.9 55.2 54.7 12.1]
+               :country ["US" "CA" "US" "UK" "DE"]}))
 
-(g/plot {:status ["active" "active" "active" "active"]})
+(-> athlete-data
+    (tc/select-rows #(< (:score %) 13))
+    (tc/select-columns [:name :score])
+    (g/plot))
 
-;; ## Integration with Kindly & Clay
+(-> athlete-data
+    (tc/group-by :sport)
+    (tc/mean :score)
+    g/plot)
 
-;; Glance works seamlessly with the Kindly ecosystem.
-;; You can use kind annotations for alternative renderings:
+;; See the [Tablecloth Documentation](https://scicloj.github.io/tablecloth/)
 
-(g/plot ^:kind/table {:product ["Widget" "Gadget" "Doohickey"]
-                      :price [19.99 29.99 14.99]
-                      :stock [45 23 67]})
-
-;; For more advanced notebook features, see the Clay documentation:
-;; https://scicloj.github.io/clay/
-
-;; ---
+;; ## 4. Plotly Specs (`g/plotly`)
 ;;
-;; ## Summary
+;; While `g/plot` is great for instant visualizations, sometimes you need
+;; more control. The `g/plotly` function returns the inferred Plotly
+;; specification as a Kindly-annotated map, which you can inspect or modify.
+
+;; Use `g/plotly` instead of `g/plot` to get the specification:
+
+^:kind/pprint
+(g/plotly {:x [1 2 3 4 5]
+           :y [3 4 5 2 1]})
+
+;; You can modify the spec to customize the visualization:
+
+(-> (g/plotly {:x [1 2 3 4 5]
+               :y [3 4 5 2 1]})
+    (assoc-in [:layout :title :text] "Custom Title")
+    (assoc-in [:data 0 :marker :color] "green")
+    (assoc-in [:data 0 :marker :size] 12)
+    (g/plot))
+
+;; Or if you prefer to build a spec from scratch:
+
+(g/plot ^:kind/plotly
+        {:data [{:x ["Jan" "Feb" "Mar" "Apr" "May"]
+                 :y [12000 15000 14000 18000 22000]
+                 :name "Revenue"
+                 :type "bar"}
+                {:x ["Jan" "Feb" "Mar" "Apr" "May"]
+                 :y [10000 13000 12000 15000 18000]
+                 :name "Costs"
+                 :type "scatter"
+                 :mode "lines+markers"}]
+         :layout {:title {:text "Revenue vs Costs"}}})
+
+;; For more information see the
+;; [Plotly Reference](https://plotly.com/javascript/basic-charts/)
+
+;; ## 5. Why Glance
 ;;
-;; Glance provides instant data visualization with zero configuration:
+;; Glance is for data explorers who want to visualize
+;; data without needing to learn plotting APIs.
 ;;
-;; - **One function**: `g/plot` handles everything
-;; - **Smart defaults**: Automatic geometry selection based on data types
-;; - **Flexible**: Works with scalars, vectors, maps, CSVs, and Hiccup
-;; - **Composable**: Nest plots in dashboards, integrate with Clay
+;; - **Approachable**: No special tooling required; just normal Clojure calls.
+;; - **Inference-first**: Automatically picks a sensible visualization from your data.
+;; - **No plotting API**: You don't need to learn Plotly configs to get value.
+;; - **Powerful when needed**: Compose dashboards with Hiccup; use kinds with Kindly.
+;; - **Flexible**: Use `g/plot` for instant results, or `g/plotly` to inspect/modify specs.
+;; - **Ecosystem-ready**: Plays well with Clay and Tablecloth for richer workflows.
 ;;
-;; Perfect for exploratory data analysis and quick insights.
+;; Just plot it with `(g/plot your-data)`.

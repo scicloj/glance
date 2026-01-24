@@ -4,10 +4,10 @@
             [tablecloth.column.api :as tcc]
             [scicloj.kindly-advice.v1.api :as advice]
             [clojure.java.io :as io]
-            [clojure.string :as str]))
+            [tablecloth.api :as tc]))
 
 (def kolls
-  #{:kind/map :kind/vector :kind/set :kind/seq})
+  #{:kind/map :kind/vector :kind/set :kind/seq :kind/dataset})
 
 (defn hiccup? [x]
   (and (vector? x)
@@ -26,26 +26,56 @@
 (defn all-integers?
   "Check if all values in a column are integers."
   [col]
-  (let [values (remove nil? col)]
-    (every? #(= % (long %)) values)))
+  (every? #(= % (long %)) (remove nil? col)))
 
 (defn distinct-count
   "Count distinct non-nil values in a column."
   [col]
   (->> col (remove nil?) distinct count))
 
-
 (defn axis-title
   "Axis title prefers keyword/symbol names, else str."
   [v]
-  (cond
-    (keyword? v) (name v)
-    (symbol? v) (name v)
-    :else (str v)))
+  (cond (keyword? v) (name v)
+        (symbol? v) (name v)
+        :else (str v)))
+
+(defn frequencies-dataset
+  "Convert values to frequency counts dataset for bar plotting."
+  [values]
+  (let [freqs (->> values frequencies (sort-by key))
+        categories (mapv first freqs)
+        counts (mapv second freqs)]
+    (ds/->dataset {:category categories :count counts})))
+
+(defn render-histogram-or-bar
+  "Render histogram for continuous or bar for discrete/categorical data."
+  [col-name col-data]
+  (let [values (remove nil? col-data)
+        ints? (all-integers? col-data)
+        uniq (distinct-count col-data)]
+    (if (and ints? (<= uniq 30))
+      (-> (frequencies-dataset values)
+          (plotly/layer-bar {:=x :category :=y :count}))
+      (let [histogram-opts (if ints?
+                             (let [min-val (apply min values)
+                                   max-val (apply max values)
+                                   nbins (min (inc (- max-val min-val)) 50)]
+                               {:=histogram-nbins (max 1 nbins)})
+                             {})
+            clean-ds (ds/->dataset {col-name values})]
+        (-> clean-ds
+            (plotly/layer-histogram (assoc histogram-opts :=x col-name)))))))
+
+(defn render-categorical-bar
+  "Render bar chart for categorical data."
+  [col-data]
+  (-> (remove nil? col-data)
+      (frequencies-dataset)
+      (plotly/layer-bar {:=x :category :=y :count})))
 
 (defn heatmap-crosstab
-  "Build a Plotly heatmap spec for two categorical columns.
-  Returns a plotly map tagged with :kind/plotly metadata."
+  "Build a Plotly heatmap spec for two categorical columns."
   [col-a col-b col-a-name col-b-name]
   (let [pairs (->> (map vector col-a col-b)
                    (remove (fn [[a b]] (or (nil? a) (nil? b)))))
@@ -66,13 +96,7 @@
     (with-meta plot {:kind/plotly true})))
 
 (defn select-geometry-single
-  "Select visualization geometry for a single column based on its type.
-   Rules:
-   - Identity → :identity
-   - Quantitative → :histogram
-   - Temporal → :histogram
-   - Categorical → :bar
-   - Default → :bar"
+  "Select visualization geometry for a single column based on its type."
   [col]
   (let [general-type (column-general-type col)]
     (case general-type
@@ -83,14 +107,7 @@
       :bar)))
 
 (defn select-geometry-pair
-  "Select visualization geometry for a pair of columns based on their types.
-   Rules:
-   - Quantitative × Quantitative → :point (scatter plot reveals correlation)
-   - Temporal × Quantitative → :line (line chart shows time series)
-   - Quantitative × Temporal → :line
-   - Categorical × Categorical → :heatmap (shows contingency)
-   - Categorical × Anything else → :bar (show distribution by category)
-   - Default → :bar"
+  "Select visualization geometry for a pair of columns based on their types."
   [col-a col-b]
   (let [type-a (column-general-type col-a)
         type-b (column-general-type col-b)]
@@ -158,33 +175,8 @@
                                  :text-align "right"}}
                    (try
                      (case geom
-                       :histogram
-                       (let [values (remove nil? col-data)
-                             ints? (all-integers? col-data)
-                             uniq (distinct-count col-data)]
-                         (if (and ints? (<= uniq 30))
-                           (let [freqs (->> values frequencies (sort-by key))
-                                 categories (mapv first freqs)
-                                 counts (mapv second freqs)
-                                 agg-ds (ds/->dataset {:category categories :count counts})]
-                             (-> agg-ds (plotly/layer-bar {:=x :category :=y :count})))
-                           (let [histogram-opts (if ints?
-                                                  (let [min-val (apply min values)
-                                                        max-val (apply max values)
-                                                        nbins (min (inc (- max-val min-val)) 50)]
-                                                    {:=histogram-nbins (max 1 nbins)})
-                                                  {})
-                                 ;; Create clean dataset with only non-nil values
-                                 clean-ds (ds/->dataset {col-name values})]
-                             (-> clean-ds (plotly/layer-histogram (assoc histogram-opts :=x col-name))))))
-                       :bar
-                       ;; For categorical, aggregate frequencies
-                       (let [values (remove nil? col-data)
-                             freqs (->> values frequencies (sort-by key))
-                             categories (mapv first freqs)
-                             counts (mapv second freqs)
-                             agg-ds (ds/->dataset {:category categories :count counts})]
-                         (-> agg-ds (plotly/layer-bar {:=x :category :=y :count})))
+                       :histogram (render-histogram-or-bar col-name col-data)
+                       :bar (render-categorical-bar col-data)
                        :identity (-> ds (plotly/layer-point {:=x col-name}))
                        (-> ds (plotly/layer-point {:=x col-name})))
                      (catch Exception _
@@ -197,86 +189,53 @@
   (let [col-names (ds/column-names ds)
         col-count (count col-names)]
     (cond
-      ;; Single column: use single-column geometry selection
       (= 1 col-count)
       (let [col (first col-names)
             col-data (ds col)
             geom (select-geometry-single col-data)]
-        (try
-          (case geom
-            :histogram
-            (let [values (remove nil? col-data)
-                  ints? (all-integers? col-data)
-                  uniq (distinct-count col-data)]
-              (if (and ints? (<= uniq 30))
-                ;; Small-cardinality integers: use bar frequencies for clean integer buckets
-                (let [freqs (->> values frequencies (sort-by key))
-                      categories (mapv first freqs)
-                      counts (mapv second freqs)
-                      agg-ds (ds/->dataset {:category categories :count counts})]
-                  (-> agg-ds (plotly/layer-bar {:=x :category :=y :count})))
-                ;; Otherwise, histogram with integer-aware nbins when possible
-                (let [histogram-opts (if ints?
-                                       (let [min-val (apply min values)
-                                             max-val (apply max values)
-                                             ;; one bin per integer step, capped
-                                             nbins (min (inc (- max-val min-val)) 50)]
-                                         {:=histogram-nbins (max 1 nbins)})
-                                       {})
-                      ;; Create clean dataset with only non-nil values
-                      clean-ds (ds/->dataset {col values})]
-                  (-> clean-ds (plotly/layer-histogram (assoc histogram-opts :=x col))))))
-            :bar
-            ;; For categorical, aggregate frequencies
-            (let [freqs (->> col-data
-                           (remove nil?)
-                           (frequencies)
-                           (sort-by key))
-                  categories (mapv first freqs)
-                  counts (mapv second freqs)
-                  agg-ds (ds/->dataset {:category categories :count counts})]
-              (-> agg-ds (plotly/layer-bar {:=x :category :=y :count})))
-            :identity (-> ds (plotly/layer-point {:=x col}))
-            (-> ds (plotly/layer-point {:=x col})))
-          (catch Exception _
-            ds)))
+        (case geom
+          :histogram (render-histogram-or-bar col col-data)
+          :bar (render-categorical-bar col-data)
+          :identity (-> ds (plotly/layer-point {:=x col}))
+          (-> ds (plotly/layer-point {:=x col}))))
 
-      ;; Two columns: use pair geometry selection
       (= 2 col-count)
       (let [[col-a col-b] col-names
             col-data-a (ds col-a)
             col-data-b (ds col-b)
-            geom (select-geometry-pair col-data-a col-data-b)]
-        (try
-          (case geom
-            :point (-> ds (plotly/layer-point {:=x col-a :=y col-b}))
-            :line (-> ds (plotly/layer-line {:=x col-a :=y col-b}))
-            :bar (-> ds (plotly/layer-bar {:=x col-a :=y col-b}))
-            :heatmap (heatmap-crosstab col-data-a col-data-b col-a col-b)
-            (-> ds (plotly/layer-point {:=x col-a :=y col-b})))
-          (catch Exception _
-            ds)))
+            type-a (column-general-type col-data-a)
+            type-b (column-general-type col-data-b)
+            geom (select-geometry-pair col-data-a col-data-b)
+            [x-col y-col] (cond
+                            (and (= :temporal type-a) (not= :temporal type-b)) [col-a col-b]
+                            (and (= :temporal type-b) (not= :temporal type-a)) [col-b col-a]
+                            :else [col-a col-b])]
+        (case geom
+          :point (-> ds (plotly/layer-point {:=x col-a :=y col-b}))
+          :line (-> ds (plotly/layer-line {:=x x-col :=y y-col}))
+          :bar (-> ds (plotly/layer-bar {:=x col-a :=y col-b}))
+          :heatmap (heatmap-crosstab col-data-a col-data-b col-a col-b)
+          (-> ds (plotly/layer-point {:=x col-a :=y col-b}))))
 
-      ;; Many columns: show grid of distributions with stats
       :else
-      (try
-        (plot-summary ds)
-        (catch Exception _
-          ds)))))
+      (plot-summary ds))))
 
-(defn url-string? [s]
-  (and (string? s)
-       (try
-         (io/as-url s)
-         true
-         (catch Exception _ false))))
+(defn dataset* [x]
+  (ds/->dataset x {:parser-fn {:date :local-date}}))
+
+(defn try-dataset [x]
+  (or
+   (and (tc/dataset? x) x)
+   (and (vector? x) (not-every? map? x) (some-> (try (dataset* {:x x}) (catch Exception _))))
+   (some-> (try (dataset* x) (catch Exception _)))))
+
+(defn plotly [x]
+  (some-> (try-dataset x) (plot*)))
 
 (defn single-value [x]
   (let [{:keys [kind]} (advice/advise {:value x})]
     (or
      (and kind (not (kolls kind)) x)
      (and (hiccup? x) (vary-meta x assoc :kind/hiccup true))
-     (and (vector? x) (not-every? map? x) (some-> (try (ds/->dataset {:x x}) (catch Exception _)) (plot*)))
-     (and (url-string? x) (some-> (try (ds/->dataset (io/input-stream x) {:file-type :csv}) (catch Exception _)) (plot*)))
-     (some-> (try (ds/->dataset x) (catch Exception _)) (plot*))
+     (plotly x)
      x)))
