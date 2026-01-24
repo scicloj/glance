@@ -11,7 +11,7 @@
 
 ;; ## Quick Start: `g/plot`
 
-(ns examples
+(ns index
   (:require [scicloj.glance :as g]))
 
 ;; Quantitative × Quantitative → scatter plot
@@ -171,7 +171,7 @@
 
 ;; See the [Tablecloth Documentation](https://scicloj.github.io/tablecloth/)
 
-;; ## Plotly Specs (`g/plotly`)
+;; ## Plotly Specs `g/plotly`
 ;;
 ;; While `g/plot` is great for instant visualizations, sometimes you need
 ;; more control. The `g/plotly` function returns the inferred Plotly

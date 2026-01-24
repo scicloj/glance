@@ -31,7 +31,7 @@ Philosophy:
 
 ::: {.sourceClojure}
 ```clojure
-(ns examples
+(ns index
   (:require [scicloj.glance :as g]))
 ```
 :::
@@ -447,7 +447,7 @@ Require Tablecloth:
 See the [Tablecloth Documentation](https://scicloj.github.io/tablecloth/)
 
 
-## Plotly Specs (`g/plotly`)
+## Plotly Specs `g/plotly`
 
 While `g/plot` is great for instant visualizations, sometimes you need
 more control. The `g/plotly` function returns the inferred Plotly
@@ -570,5 +570,5 @@ Just plot it with `(g/plot your-data)`.
 
 
 ```{=html}
-<div><pre><small><small>source: notebooks/examples.clj</small></small></pre></div>
+<div><pre><small><small>source: notebooks/index.clj</small></small></pre></div>
 ```

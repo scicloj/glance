@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>examples</title>
+<title>index</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -58,18 +58,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="examples_files/libs/clipboard/clipboard.min.js"></script>
-<script src="examples_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="examples_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="examples_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="examples_files/libs/quarto-html/popper.min.js"></script>
-<script src="examples_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="examples_files/libs/quarto-html/anchor.min.js"></script>
-<link href="examples_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="examples_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="examples_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="examples_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="examples_files/libs/bootstrap/bootstrap-12c55688592a112f3831beacbe2a3fdc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="index_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="index_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap-12c55688592a112f3831beacbe2a3fdc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -88,7 +88,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#multi-column-datasets" id="toc-multi-column-datasets" class="nav-link" data-scroll-target="#multi-column-datasets">Multi-Column Datasets</a></li>
   <li><a href="#composing-kinds-and-hiccup" id="toc-composing-kinds-and-hiccup" class="nav-link" data-scroll-target="#composing-kinds-and-hiccup">Composing Kinds and Hiccup</a></li>
   <li><a href="#preparing-data-with-tablecloth" id="toc-preparing-data-with-tablecloth" class="nav-link" data-scroll-target="#preparing-data-with-tablecloth">Preparing Data with Tablecloth</a></li>
-  <li><a href="#plotly-specs-gplotly" id="toc-plotly-specs-gplotly" class="nav-link" data-scroll-target="#plotly-specs-gplotly">Plotly Specs (<code>g/plotly</code>)</a></li>
+  <li><a href="#plotly-specs-gplotly" id="toc-plotly-specs-gplotly" class="nav-link" data-scroll-target="#plotly-specs-gplotly">Plotly Specs <code>g/plotly</code></a></li>
   <li><a href="#why-glance" id="toc-why-glance" class="nav-link" data-scroll-target="#why-glance">Why Glance</a></li>
   </ul>
 </nav>
@@ -125,7 +125,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="quick-start-gplot" class="level2">
 <h2 class="anchored" data-anchor-id="quick-start-gplot">Quick Start: <code>g/plot</code></h2>
 <div class="sourceClojure">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">ns</span> examples</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">ns</span> <span class="kw">index</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  (<span class="at">:require</span> [scicloj.glance <span class="at">:as</span> g]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Quantitative × Quantitative → scatter plot</p>
@@ -359,7 +359,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>See the <a href="https://scicloj.github.io/tablecloth/">Tablecloth Documentation</a></p>
 </section>
 <section id="plotly-specs-gplotly" class="level2">
-<h2 class="anchored" data-anchor-id="plotly-specs-gplotly">Plotly Specs (<code>g/plotly</code>)</h2>
+<h2 class="anchored" data-anchor-id="plotly-specs-gplotly">Plotly Specs <code>g/plotly</code></h2>
 <p>While <code>g/plot</code> is great for instant visualizations, sometimes you need more control. The <code>g/plotly</code> function returns the inferred Plotly specification as a Kindly-annotated map, which you can inspect or modify.</p>
 <p>Use <code>g/plotly</code> instead of <code>g/plot</code> to get the specification:</p>
 <div class="sourceClojure">
@@ -432,7 +432,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>Just plot it with <code>(g/plot your-data)</code>.</p>
 <div style="background-color:grey;height:2px;width:100%;"></div>
-<div><pre><small><small>source: notebooks/examples.clj</small></small></pre></div>
+<div><pre><small><small>source: notebooks/index.clj</small></small></pre></div>
 </section>
 
 </main>
