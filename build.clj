@@ -7,7 +7,7 @@
             [deps-deploy.deps-deploy :as dd]))
 
 (def lib 'org.scicloj/glance)
-(def version "0.1.0-alpha1")
+(def version "0.1.0-alpha2")
 (def class-dir "target/classes")
 (def jar-file (format "target/%s-%s.jar" (name lib) version))
 
