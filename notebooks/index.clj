@@ -11,6 +11,11 @@
 
 ;; ## Quick Start: `g/plot`
 
+;; Add Glance as a dependency:
+;; [![Clojars Project](https://img.shields.io/clojars/v/org.scicloj/glance.svg)](https://clojars.org/org.scicloj/glance)
+
+;; Create a namespace and require Glance
+
 (ns index
   (:require [scicloj.glance :as g]))
 

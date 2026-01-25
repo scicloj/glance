@@ -1,5 +1,6 @@
 {:deps {org.scicloj/clay       {:mvn/version "2.0.6"}
-        org.scicloj/tableplot  {:mvn/version "1-beta14"}}
+        org.scicloj/tableplot  {:mvn/version "1-beta14"}
+        org.slf4j/slf4j-nop    {:mvn/version "2.0.17"}}
  :aliases
  {:dev {:extra-paths ["notebooks"]}
   :local-deps {:override-deps {org.scicloj/clay {:local/root "../clay"}}}
@@ -9,6 +10,6 @@
   ;; clojure -T:build ci         - Build JAR (runs ci pipeline)
   ;; clojure -T:build deploy     - Deploy to Clojars
   :build {:deps {io.github.clojure/tools.build {:git/tag "v0.10.12"
-                                                :git/sha "97c55562"}
+                                                :git/sha "97c5562"}
                  slipset/deps-deploy {:mvn/version "0.2.2"}}
           :ns-default build}}}

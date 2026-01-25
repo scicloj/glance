@@ -22,10 +22,7 @@ Glance deliberately optimizes for:
 
 Add Glance to your project dependencies:
 
-**deps.edn:**
-```clojure
-org.scicloj/glance {:mvn/version "TODO"}
-```
+[![Clojars Project](https://img.shields.io/clojars/v/org.scicloj/glance.svg)](https://clojars.org/org.scicloj/glance)
 
 ## Usage
 
