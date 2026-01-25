@@ -575,5 +575,5 @@ Just plot it with `(g/plot your-data)`.
 
 
 ```{=html}
-<div><pre><small><small>source: notebooks/index.clj</small></small></pre></div>
+<div><pre><small><small>source: <a href="https://github.com/scicloj/glance/blob/main/notebooks/index.clj">notebooks/index.clj</a></small></small></pre></div>
 ```
